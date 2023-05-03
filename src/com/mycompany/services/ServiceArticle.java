@@ -11,7 +11,7 @@ import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
-import com.codename1.io.charArrayReader;
+//import com.codename1.io.charArrayReader;
 import com.codename1.ui.events.ActionListener;
 import com.mycompany.entities.Article;
 import com.mycompany.utils.Statics;
@@ -49,7 +49,7 @@ private ConnectionRequest req;
     {
         String url= Statics.BASE_URL+"/article/article/addarticleJSON/new?titre="+article.getTitre()+"&description="+article.getDescription()+"&image="+"&prix="+article.getPrix()+"&type="+article.getType()+"&stock="+article.getStock();
         req.setUrl(url);
-        req.addResponseListener((e) -> {
+        req.addResponseListener( e -> {
             String str = new String(req.getResponseData());
             System.out.println("data =="+str);                
         });
@@ -58,7 +58,7 @@ private ConnectionRequest req;
     
     
      //---------------- Affichage----------------
-   /* public ArrayList<Article>affichageArticle(){
+    public ArrayList<Article>affichageArticle(){
         ArrayList<Article> result = new ArrayList<>();         
         String url = Statics.BASE_URL+"/article/article/listeA";
         req.setUrl(url);
@@ -66,31 +66,36 @@ private ConnectionRequest req;
         req.addResponseListener(new ActionListener<NetworkEvent>(){
             @Override
             public void actionPerformed(NetworkEvent evt) {
-            JSONParser jsonp = new JSONParser();
+            JSONParser json ;
+                json = new JSONParser();
             
             try{
-            Map<String,Object>mapArticles = jsonp.parseJSON(new charArrayReader(new String(req.getResponseData()).toCharArray()));
+            Map<String,Object>mapArticles = json.parseJSON(new CharArrayReader(new String(req.getResponseData()).toCharArray()));          
             List<Map<String,Object>> listofMaps = (List<Map<String,Object>>) mapArticles.get("root");
-            
+   
             
             for(Map<String,Object> obj : listofMaps){
                 Article ar = new Article();
                 
                 float id = Float.parseFloat(obj.get("id").toString());
+                  String titre = obj.get("titre").toString();
+                    String description = obj.get("description").toString();
                 float prix = Float.parseFloat(obj.get("prix").toString());
-                float stock = Float.parseFloat(obj.get("stock").toString());
-                String titre = obj.get("titre").toString();
-                String image = obj.get("image").toString();
-                String description = obj.get("description").toString();
+                
+              
+               // String image = obj.get("image").toString();
+              float stock = Float.parseFloat(obj.get("stock").toString());
                 String type = obj.get("type").toString();
           
                 ar.setId((int)id);
                 ar.setTitre(titre);
                 ar.setDescription(description);
-                ar.setImage(image);
+                 ar.setPrix((float)prix);
+                    ar.setType(type);
+              //  ar.setImage(image);
                 ar.setStock((int)stock);
-                ar.setType(type);
-                ar.setPrix((float)prix);
+             
+               
                 
                 result.add(ar);
             }
@@ -104,60 +109,11 @@ private ConnectionRequest req;
     NetworkManager.getInstance().addToQueueAndWait(req);
     return result;
     } 
-    */
     
-  public ArrayList<Article> parseArticles(String jsonText) {
-        try {
-            articles = new ArrayList<>();
-            JSONParser j = new JSONParser();
-            Map<String, Object> articlesListJson
-                    = j.parseJSON(new CharArrayReader(jsonText.toCharArray()));
-
-            List<Map<String, Object>> list = (List<Map<String, Object>>) articlesListJson.get("root");
-            for (Map<String, Object> obj : list) {
-                Article ar = new Article();
-                float id = Float.parseFloat(obj.get("id").toString());
-                ar.setId((int) id);
-                ar.setPrix((Float.parseFloat(obj.get("prix").toString())));
-                ar.setStock(((int) Float.parseFloat(obj.get("stock").toString())));
-                if (obj.get("titre") == null) {
-                    ar.setTitre("null");
-                } else {
-                    ar.setTitre(obj.get("titre").toString());
-                }
-                 ar.setType(obj.get("type").toString());
-                 ar.setImage(obj.get("image").toString());
-                 ar.setDescription(obj.get("description").toString());
-                 ar.setType(obj.get("type").toString());
-         
-                articles.add(ar);
-            }
-
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return articles;
-    }  
-  
-    
-    public ArrayList<Article> getAllArticles() {
-        String url = Statics.BASE_URL + "/article/article/listeA";
-        req.setUrl(url);
-        req.setPost(false);
-        req.addResponseListener(new ActionListener<NetworkEvent>() {
-            @Override
-            public void actionPerformed(NetworkEvent evt) {
-                articles = parseArticles(new String(req.getResponseData()));
-                req.removeResponseListener(this);
-            }
-        });
-        NetworkManager.getInstance().addToQueueAndWait(req);
-        return articles;
-    }
-    
+ 
     //-------------Delete------------- 
     public boolean deleteArticle(int id ) {
-        String url = Statics.BASE_URL +"/article/article/deletearticleJSON?id="+id;
+        String url = Statics.BASE_URL +"/article/article/deletearticleJSON/"+id;
         
         req.setUrl(url);
         
@@ -175,7 +131,7 @@ private ConnectionRequest req;
    
     //------------Update------------- 
     public boolean modifierArticle(Article article) {
-        String url = Statics.BASE_URL +"/article/article/updatearticleJSON?id="+article.getId()+"&titre="+article.getTitre()+"&description="+article.getDescription()+"&image="+article.getImage()+"&prix="+article.getPrix()+"&type="+article.getType()+"&stock="+article.getStock();
+        String url = Statics.BASE_URL +"/article/article/updatearticleJSON/"+article.getId()+"?titre="+article.getTitre()+"&description="+article.getDescription()+"&prix="+article.getPrix()+"&type="+article.getType()+"&stock="+article.getStock();
         req.setUrl(url);
         
         req.addResponseListener(new ActionListener<NetworkEvent>() {

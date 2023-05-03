@@ -11,20 +11,20 @@ package com.mycompany.entities;
  */
 public class Category {
   private int id;
-  private String nom_cat, image;
+  private String nom/* img*/;
   
     public Category() {
     }
     
-    public Category(int id, String nom_cat, String image) {
+    public Category(int id, String nom ) {
         this.id = id;
-        this.nom_cat = nom_cat;
-        this.image = image;
+        this.nom = nom;
+       
     }
 
-    public Category(String nom_cat, String image) {
-        this.nom_cat = nom_cat;
-        this.image = image;
+    public Category(String nom) {
+        this.nom = nom;
+       
     }
 
     public int getId() {
@@ -35,25 +35,18 @@ public class Category {
         this.id = id;
     }
 
-    public String getNom_cat() {
-        return nom_cat;
+    public String getNom() {
+        return nom;
     }
 
-    public void setNom_cat(String nom_cat) {
-        this.nom_cat = nom_cat;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
+   
     @Override
     public String toString() {
-        return "Category{" + "id=" + id + ", nom_cat=" + nom_cat + ", image=" + image + '}';
+        return "Category{" + "id=" + id + ", nom=" + nom +  '}';
     }
 
     

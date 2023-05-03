@@ -5,19 +5,22 @@
  */
 package com.mycompany.services;
 
+import java.io.IOException;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
+//import com.codename1.io.charArrayReader;
 import com.codename1.ui.events.ActionListener;
 import com.mycompany.entities.Article;
 import com.mycompany.entities.Category;
 import com.mycompany.utils.Statics;
-import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  *
@@ -46,7 +49,7 @@ private ConnectionRequest req;
     //---------------- Ajout----------------
     public void ajoutCategory(Category category)
     {
-        String url= Statics.BASE_URL+"/category/category/addcategoryJSON/new?nom_cat="+category.getNom_cat()+"&image="+category.getImage();
+        String url= Statics.BASE_URL+"/category/category/addcategoryJSON/new?nom="+category.getNom()/*+"&img="+category.getImg()*/;
         req.setUrl(url);
         req.addResponseListener((e) -> {
             String str = new String(req.getResponseData());
@@ -56,54 +59,55 @@ private ConnectionRequest req;
     }  
     
     
-     //---------------- Affichage----------------    
-  public ArrayList<Category> parseCategories(String jsonText) {
-        try {
-            categories = new ArrayList<>();
-            JSONParser j = new JSONParser();
-            Map<String, Object> categoriesListJson
-                    = j.parseJSON(new CharArrayReader(jsonText.toCharArray()));
-
-            List<Map<String, Object>> list = (List<Map<String, Object>>) categoriesListJson.get("root");
-            for (Map<String, Object> obj : list) {
-                Category catg = new Category();
-                float id = Float.parseFloat(obj.get("id").toString());
-                catg.setId((int) id);
-                if (obj.get("nom_cat") == null) {
-                    catg.setNom_cat("null");
-                } else {
-                    catg.setNom_cat(obj.get("nom_cat").toString());
-                }
-                 catg.setImage(obj.get("image").toString());
-           
-                categories.add(catg);
-            }
-
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-        return categories;
-    }  
-  
-    
-    public ArrayList<Category> getAllCategories() {
-        String url = Statics.BASE_URL + "/category/category/listeC";
+     //---------------- Affichage----------------     
+      public ArrayList<Category>affichageCategory(){
+        ArrayList<Category> result = new ArrayList<>();         
+        String url = Statics.BASE_URL+"/category/category/listeC";
         req.setUrl(url);
-        req.setPost(false);
-        req.addResponseListener(new ActionListener<NetworkEvent>() {
+        
+        req.addResponseListener(new ActionListener<NetworkEvent>(){
             @Override
             public void actionPerformed(NetworkEvent evt) {
-                categories = parseCategories(new String(req.getResponseData()));
-                req.removeResponseListener(this);
+            JSONParser json ;
+                json = new JSONParser();
+            
+            try{
+            Map<String,Object>mapCategory = json.parseJSON(new CharArrayReader(new String(req.getResponseData()).toCharArray()));          
+            List<Map<String,Object>> listofMaps = (List<Map<String,Object>>) mapCategory.get("root");
+   
+            
+            for(Map<String,Object> obj : listofMaps){
+                Category catg = new Category();
+                
+                float id = Float.parseFloat(obj.get("id").toString());
+               
+                String nom = obj.get("nom").toString();
+             //  String img = obj.get("img").toString();
+               
+          
+                catg.setId((int)id);
+                catg.setNom(nom);
+               
+            //  catg.setImg(img);
+               
+                
+                result.add(catg);
             }
+            }catch(Exception ex)
+            {
+                ex.printStackTrace();
+            
+            }}            
         });
-        NetworkManager.getInstance().addToQueueAndWait(req);
-        return categories;
-    }
+        
+    NetworkManager.getInstance().addToQueueAndWait(req);
+    return result;
+    } 
+    
     
     //-------------Delete------------- 
     public boolean deleteCategory(int id ) {
-        String url = Statics.BASE_URL +"/category/category/deletecategoryJSON?id="+id;
+        String url = Statics.BASE_URL +"/category/category/deletecategoryJSON/"+id;
         
         req.setUrl(url);
         
@@ -120,15 +124,15 @@ private ConnectionRequest req;
     }
    
     //------------Update------------- 
-    public boolean modifierArticle(Category category) {
-        String url = Statics.BASE_URL +"/category/category/updatecategoryJSON?id="+category.getId()+"&nom_cat="+category.getNom_cat()+"&image="+category.getImage();
+    public boolean modifierCategory(Category category) {
+        String url = Statics.BASE_URL +"/category/category/updatecategoryJSON/"+category.getId()+"?nom="+category.getNom()/*+"&img="+category.getImg()*/;
         req.setUrl(url);
         
         req.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
                 resultOK = req.getResponseCode() == 200 ;  // Code response Http 200 ok
-                req.removeResponseListener(this);
+               req.removeResponseListener(this);
             }
         });
         

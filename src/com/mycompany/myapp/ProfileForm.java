@@ -20,13 +20,17 @@
 package com.mycompany.myapp;
 
 import com.codename1.components.FloatingActionButton;
+import com.codename1.components.InfiniteProgress;
 import com.codename1.components.MultiButton;
 import com.codename1.ui.Button;
 import com.codename1.ui.Container;
+import com.codename1.ui.Dialog;
 import com.codename1.ui.FontImage;
+import com.codename1.ui.Form;
 import com.codename1.ui.Graphics;
 import com.codename1.ui.Image;
 import com.codename1.ui.Label;
+import com.codename1.ui.RadioButton;
 import com.codename1.ui.Toolbar;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.BoxLayout;
@@ -34,6 +38,8 @@ import com.codename1.ui.layouts.FlowLayout;
 import com.codename1.ui.layouts.GridLayout;
 import com.codename1.ui.plaf.Style;
 import com.codename1.ui.util.Resources;
+import com.mycompany.gui.AjoutArticleForm;
+import com.mycompany.gui.ListArticleForm;
 
 /**
  * Represents a user profile in the app, the first form we open after the walkthru
@@ -41,7 +47,9 @@ import com.codename1.ui.util.Resources;
  * @author Shai Almog
  */
 public class ProfileForm extends SideMenuBaseForm {
+    Form previous;
     public ProfileForm(Resources res) {
+        
         super(BoxLayout.y());
         Toolbar tb = getToolbar();
         tb.setTitleCentered(false);
@@ -54,30 +62,35 @@ public class ProfileForm extends SideMenuBaseForm {
         Button menuButton = new Button("");
         menuButton.setUIID("Title");
         FontImage.setMaterialIcon(menuButton, FontImage.MATERIAL_MENU);
-        menuButton.addActionListener(e -> getToolbar().openSideMenu());
         
+        menuButton.addActionListener(e -> getToolbar().openSideMenu());
         Container remainingTasks = BoxLayout.encloseY(
-                        new Label("12", "CenterTitle"),
-                        new Label("remaining tasks", "CenterSubTitle")
-                );
+      
+        );
         remainingTasks.setUIID("RemainingTasks");
         Container completedTasks = BoxLayout.encloseY(
-                        new Label("32", "CenterTitle"),
-                        new Label("completed tasks", "CenterSubTitle")
+                     
         );
         completedTasks.setUIID("CompletedTasks");
 
         Container titleCmp = BoxLayout.encloseY(
                         FlowLayout.encloseIn(menuButton),
+              
                         BorderLayout.centerAbsolute(
                                 BoxLayout.encloseY(
-                                    new Label("Nadine Elleuch", "Title"),
-                                    new Label("UI/UX Designer", "SubTitle")
+                                    new Label("Nadine Elleuch", "Title")
+                                  
                                 )
                             ).add(BorderLayout.WEST, profilePicLabel),
                         GridLayout.encloseIn(2, remainingTasks, completedTasks)
                 );
-        
+              Button article = new Button("Article");
+        article.setUIID("Article");
+        article.addActionListener(e -> {
+            Toolbar.setGlobalToolbar(false);
+            new AjoutArticleForm(res).show();
+            Toolbar.setGlobalToolbar(true);
+        });
         FloatingActionButton fab = FloatingActionButton.createFAB(FontImage.MATERIAL_ADD);
         fab.getAllStyles().setMarginUnit(Style.UNIT_TYPE_PIXELS);
         fab.getAllStyles().setMargin(BOTTOM, completedTasks.getPreferredH() - fab.getPreferredH() / 2);
@@ -87,14 +100,29 @@ public class ProfileForm extends SideMenuBaseForm {
         
         FontImage arrowDown = FontImage.createMaterial(FontImage.MATERIAL_KEYBOARD_ARROW_DOWN, "Label", 3);
         
-        addButtonBottom(arrowDown, "Ajouter Categorie", 0xd997f1, true);
-        addButtonBottom(arrowDown, "Ajouter Sous-Categorie", 0x5ae29d, false);
-        addButtonBottom(arrowDown, "Ajouter Article ", 0x4dc2ff, false);
-       
+        //addButtonBottom(arrowDown, "Ajouter Categorie", 0xd997f1?, e -> new AjoutArticleForm(res).show());
+      //  addButtonBottom(arrowDown, "Ajouter Sous-Categorie", 0x5ae29d, true);
+        //addButtonBottom(arrowDown, "Ajouter Article ", 0x4dc2ff, true);
+     
+        /*/   Button article = new Button("");
+        article.setUIID("Article");
+       FontImage.setMaterialIcon(article, FontImage.MATERIAL_KEYBOARD_ARROW_DOWN); 
+        article.addActionListener(e -> new AjoutArticleForm(res).show());
+       */
+        
+       /* Button add = new Button();
+        add.addActionListener((e) -> {
+               InfiniteProgress ip = new InfiniteProgress();
+        final Dialog ipDlg = ip.showInifiniteBlocking();
+         new AjoutArticleForm(res).show();              
+              // refreshTheme();                
+        });*/
+        
+        
         setupSideMenu(res);
     }
     
-    private void addButtonBottom(Image arrowDown, String text, int color, boolean first) {
+   /* private void addButtonBottom(Image arrowDown, String text, int color) {
         MultiButton finishLandingPage = new MultiButton(text);
         finishLandingPage.setEmblem(arrowDown);
         finishLandingPage.setUIID("Container");
@@ -102,7 +130,7 @@ public class ProfileForm extends SideMenuBaseForm {
         finishLandingPage.setIcon(createCircleLine(color, finishLandingPage.getPreferredH(),  first));
         finishLandingPage.setIconUIID("Container");
         add(FlowLayout.encloseIn(finishLandingPage));
-    }
+    }*/
     
     private Image createCircleLine(int color, int height, boolean first) {
         Image img = Image.createImage(height, height, 0);
@@ -122,6 +150,8 @@ public class ProfileForm extends SideMenuBaseForm {
 
     @Override
     protected void showOtherForm(Resources res) {
-        new StatsForm(res).show();
+      //  new StatsForm(res).show();
     }
+    
+     
 }
