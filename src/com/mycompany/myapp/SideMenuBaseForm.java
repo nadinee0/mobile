@@ -16,7 +16,6 @@
  * CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE 
  * OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  */
-
 package com.mycompany.myapp;
 
 import com.codename1.components.ToastBar;
@@ -29,10 +28,12 @@ import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.gui.AddTeam;
 import com.mycompany.gui.AfficherEvents;
 import com.mycompany.gui.AjoutArticleForm;
 import com.mycompany.gui.AjoutCategoryForm;
 import com.mycompany.gui.AjoutEvents;
+import com.mycompany.gui.AllTeam;
 import com.mycompany.gui.StatistiquePieForm;
 
 /**
@@ -56,7 +57,7 @@ public abstract class SideMenuBaseForm extends Form {
     public SideMenuBaseForm(Layout contentPaneLayout) {
         super(contentPaneLayout);
     }
-    
+
     public void setupSideMenu(Resources res) {
         Image profilePic = res.getImage("user-picture.jpg");
         Image mask = res.getImage("round-mask.png");
@@ -67,24 +68,25 @@ public abstract class SideMenuBaseForm extends Form {
 
         Container sidemenuTop = BorderLayout.center(profilePicLabel);
         sidemenuTop.setUIID("SidemenuTop");
-        
-        getToolbar().addComponentToSideMenu(sidemenuTop);
-        getToolbar().addMaterialCommandToSideMenu("  Article", FontImage.MATERIAL_DASHBOARD,  e -> new AjoutArticleForm(res).show());
-        getToolbar().addMaterialCommandToSideMenu("  Categorie", FontImage.MATERIAL_TRENDING_UP,  e -> new AjoutCategoryForm(res).show());
-        getToolbar().addMaterialCommandToSideMenu("  Statistique Article", FontImage.MATERIAL_TRENDING_DOWN,  e -> new StatistiquePieForm(res).show());
-        getToolbar().addMaterialCommandToSideMenu(" Events", FontImage.MATERIAL_DASHBOARD,  e -> new AfficherEvents(this).show());
-        getToolbar().addMaterialCommandToSideMenu(" Add Events", FontImage.MATERIAL_DASHBOARD,  e -> new AjoutEvents(this).show());
-        
 
-      /*  Button btnevents = new Button("Afficher Events");
+        getToolbar().addComponentToSideMenu(sidemenuTop);
+        getToolbar().addMaterialCommandToSideMenu(" Article", FontImage.MATERIAL_DASHBOARD, e -> new AjoutArticleForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu(" Categorie", FontImage.MATERIAL_TRENDING_UP, e -> new AjoutCategoryForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu(" Statistique Article", FontImage.MATERIAL_TRENDING_DOWN, e -> new StatistiquePieForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu(" Events", FontImage.MATERIAL_DASHBOARD, e -> new AfficherEvents(this).show());
+        getToolbar().addMaterialCommandToSideMenu(" Add Events", FontImage.MATERIAL_DASHBOARD, e -> new AjoutEvents(this).show());
+        getToolbar().addMaterialCommandToSideMenu(" Teams", FontImage.MATERIAL_DASHBOARD, e -> new AllTeam(res).show());
+        //getToolbar().addMaterialCommandToSideMenu(" Add teams", FontImage.MATERIAL_DASHBOARD, e -> new AddTeam(this).show());
+
+
+        /*  Button btnevents = new Button("Afficher Events");
         Button btnaddevent = new Button("Ajouter Events");
 
         
         btnevents.addActionListener(e-> new AfficherEvents(this).show());
         btnaddevent.addActionListener(e-> new AjoutEvents(this).show());
         addAll(btnevents,btnaddevent);*/
-
     }
-    
+
     protected abstract void showOtherForm(Resources res);
 }

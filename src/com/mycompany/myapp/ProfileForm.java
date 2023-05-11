@@ -78,7 +78,7 @@ public class ProfileForm extends SideMenuBaseForm {
               
                         BorderLayout.centerAbsolute(
                                 BoxLayout.encloseY(
-                                    new Label("Nadine Elleuch", "Title")
+                                    new Label("Leaguestorm", "Title")
                                   
                                 )
                             ).add(BorderLayout.WEST, profilePicLabel),
