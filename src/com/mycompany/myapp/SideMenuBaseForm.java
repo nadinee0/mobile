@@ -20,6 +20,7 @@
 package com.mycompany.myapp;
 
 import com.codename1.components.ToastBar;
+import com.codename1.ui.Button;
 import com.codename1.ui.Container;
 import com.codename1.ui.FontImage;
 import com.codename1.ui.Form;
@@ -28,8 +29,10 @@ import com.codename1.ui.Label;
 import com.codename1.ui.layouts.BorderLayout;
 import com.codename1.ui.layouts.Layout;
 import com.codename1.ui.util.Resources;
+import com.mycompany.gui.AfficherEvents;
 import com.mycompany.gui.AjoutArticleForm;
 import com.mycompany.gui.AjoutCategoryForm;
+import com.mycompany.gui.AjoutEvents;
 import com.mycompany.gui.StatistiquePieForm;
 
 /**
@@ -68,7 +71,18 @@ public abstract class SideMenuBaseForm extends Form {
         getToolbar().addComponentToSideMenu(sidemenuTop);
         getToolbar().addMaterialCommandToSideMenu("  Article", FontImage.MATERIAL_DASHBOARD,  e -> new AjoutArticleForm(res).show());
         getToolbar().addMaterialCommandToSideMenu("  Categorie", FontImage.MATERIAL_TRENDING_UP,  e -> new AjoutCategoryForm(res).show());
-        getToolbar().addMaterialCommandToSideMenu("  Statistique", FontImage.MATERIAL_TRENDING_DOWN,  e -> new StatistiquePieForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu("  Statistique Article", FontImage.MATERIAL_TRENDING_DOWN,  e -> new StatistiquePieForm(res).show());
+        getToolbar().addMaterialCommandToSideMenu(" Events", FontImage.MATERIAL_DASHBOARD,  e -> new AfficherEvents(this).show());
+        getToolbar().addMaterialCommandToSideMenu(" Add Events", FontImage.MATERIAL_DASHBOARD,  e -> new AjoutEvents(this).show());
+        
+
+      /*  Button btnevents = new Button("Afficher Events");
+        Button btnaddevent = new Button("Ajouter Events");
+
+        
+        btnevents.addActionListener(e-> new AfficherEvents(this).show());
+        btnaddevent.addActionListener(e-> new AjoutEvents(this).show());
+        addAll(btnevents,btnaddevent);*/
 
     }
     
